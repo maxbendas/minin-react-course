@@ -1,25 +1,55 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {Component} from "react";
+import Car from "./Car";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    divStyle = {
+        textAlign: 'center'
+    }
+    state = {
+        cars: [
+            {name: 'Audi', year: 2000},
+            {name: 'Ford', year: 2010},
+            {name: 'Mazda', year: 2020},
+        ],
+        pageTitle: 'React',
+        showCars: false
+    }
+
+    onChangeName = (name, index) => {
+        const car = this.state.cars[index]
+        car.name = name
+        const cars = [...this.state.cars]
+        cars[index]=car
+        this.setState({cars})
+    }
+
+    toggleCarsHandler = () => {
+        this.setState({showCars: !this.state.showCars})
+    }
+
+    onDelete = (index)=>{
+        const cars = [...this.state.cars]
+        cars.splice(index,1)
+        this.setState({cars})
+}
+
+    render() {
+        return (
+            <div className="App" style={this.divStyle}>
+                <h1>{this.state.pageTitle}</h1>
+                <button onClick={this.toggleCarsHandler}>Toggle cars</button>
+                {this.state.showCars && this.state.cars.map((car, index) => {
+                    return <Car key={index}
+                                name={car.name}
+                                year={car.year}
+                                onChangeName={(e) => this.onChangeName(e.target.value, index)}
+                                onDelete={()=>this.onDelete(index)}
+                    />
+                })}
+            </div>
+        );
+    }
 }
 
 export default App;
