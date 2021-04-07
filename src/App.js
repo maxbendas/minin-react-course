@@ -1,6 +1,6 @@
 import './App.css';
 import React, {Component} from "react";
-import Car from "./Car";
+import Car from "./car/Car";
 
 class App extends Component {
     divStyle = {
@@ -39,14 +39,20 @@ class App extends Component {
             <div className="App" style={this.divStyle}>
                 <h1>{this.state.pageTitle}</h1>
                 <button onClick={this.toggleCarsHandler}>Toggle cars</button>
-                {this.state.showCars && this.state.cars.map((car, index) => {
-                    return <Car key={index}
-                                name={car.name}
-                                year={car.year}
-                                onChangeName={(e) => this.onChangeName(e.target.value, index)}
-                                onDelete={()=>this.onDelete(index)}
-                    />
-                })}
+                <div style={{
+                    width: 400,
+                    margin: 'auto',
+                    paddingTop: 20
+                }}>
+                    {this.state.showCars && this.state.cars.map((car, index) => {
+                        return <Car key={index}
+                                    name={car.name}
+                                    year={car.year}
+                                    onChangeName={(e) => this.onChangeName(e.target.value, index)}
+                                    onDelete={()=>this.onDelete(index)}
+                        />
+                    })}
+                </div>
             </div>
         );
     }
