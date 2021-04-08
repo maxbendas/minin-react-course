@@ -1,0 +1,19 @@
+.app  {
+    text-align: center;
+}
+
+.button {
+    margin-top: 20px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    &:focus, &:active {
+        outline: none;
+    }
+
+    &:hover {
+        background: #f0ff1e;
+    }
+}

@@ -1,6 +1,8 @@
-import './App.css';
+import './App.scss';
 import React, {Component} from "react";
 import Car from "./car/Car";
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
+import Counter from "./car/Counter/Counter";
 
 class App extends Component {
     constructor(props) {
@@ -28,7 +30,7 @@ class App extends Component {
         this.setState({showCars: !this.state.showCars})
     }
 
-    onDelete = (index) => {
+    deleteHandler = (index) => {
         const cars = [...this.state.cars]
         cars.splice(index, 1)
         this.setState({cars})
@@ -36,8 +38,9 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="app">
                 <h1>{this.props.title}</h1>
+                <Counter/>
                 <button
                     className="button"
                     onClick={this.toggleCarsHandler}>
@@ -49,12 +52,16 @@ class App extends Component {
                     paddingTop: 20
                 }}>
                     {this.state.showCars && this.state.cars.map((car, index) => {
-                        return <Car key={index}
-                                    name={car.name}
-                                    year={car.year}
-                                    onChangeName={(e) => this.onChangeName(e.target.value, index)}
-                                    onDelete={() => this.onDelete(index)}
-                        />
+                        return (
+                            <ErrorBoundary key={index}>
+                                <Car
+                                     name={car.name}
+                                     year={car.year}
+                                     onChangeName={(e) => this.onChangeName(e.target.value, index)}
+                                     onDelete={() => this.deleteHandler(index)}
+                                />
+                            </ErrorBoundary>
+                        )
                     })}
                 </div>
             </div>

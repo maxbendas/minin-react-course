@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import Radium from 'radium';
-import './car.css';
+import './car.scss';
 
 class Car extends Component {
     render() {
-        let {name, year, onChangeName, onDelete} = this.props;
+        // if(Math.random()>0.7){
+        //     throw new Error('Car random failed')
+        // }
+        const {name, year, onChangeName, onDelete} = this.props;
         const style = {
             ':hover': {
                 border: '2px solid #ccc',
                 boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .3)',
+                cursor: 'pointer'
             }
         }
         const inputClasses = ['input']
