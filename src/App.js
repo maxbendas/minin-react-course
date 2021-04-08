@@ -3,24 +3,24 @@ import React, {Component} from "react";
 import Car from "./car/Car";
 
 class App extends Component {
-    divStyle = {
-        textAlign: 'center'
-    }
-    state = {
-        cars: [
-            {name: 'Audi', year: 2000},
-            {name: 'Ford', year: 2010},
-            {name: 'Mazda', year: 2020},
-        ],
-        pageTitle: 'React',
-        showCars: false
+    constructor(props) {
+        super(props)
+        this.state = {
+            cars: [
+                {name: 'Audi', year: 2000},
+                {name: 'Ford', year: 2010},
+                {name: 'Mazda', year: 2020},
+            ],
+            pageTitle: 'React',
+            showCars: false
+        }
     }
 
     onChangeName = (name, index) => {
         const car = this.state.cars[index]
         car.name = name
         const cars = [...this.state.cars]
-        cars[index]=car
+        cars[index] = car
         this.setState({cars})
     }
 
@@ -28,17 +28,21 @@ class App extends Component {
         this.setState({showCars: !this.state.showCars})
     }
 
-    onDelete = (index)=>{
+    onDelete = (index) => {
         const cars = [...this.state.cars]
-        cars.splice(index,1)
+        cars.splice(index, 1)
         this.setState({cars})
-}
+    }
 
     render() {
         return (
-            <div className="App" style={this.divStyle}>
-                <h1>{this.state.pageTitle}</h1>
-                <button onClick={this.toggleCarsHandler}>Toggle cars</button>
+            <div className="App">
+                <h1>{this.props.title}</h1>
+                <button
+                    className="button"
+                    onClick={this.toggleCarsHandler}>
+                    Toggle cars
+                </button>
                 <div style={{
                     width: 400,
                     margin: 'auto',
@@ -49,7 +53,7 @@ class App extends Component {
                                     name={car.name}
                                     year={car.year}
                                     onChangeName={(e) => this.onChangeName(e.target.value, index)}
-                                    onDelete={()=>this.onDelete(index)}
+                                    onDelete={() => this.onDelete(index)}
                         />
                     })}
                 </div>
