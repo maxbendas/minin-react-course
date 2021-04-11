@@ -1,36 +1,50 @@
 import React, {Component} from 'react';
-import Radium from 'radium';
-import './car.scss';
+import PropTypes from 'prop-types';
+import styles from './Car.module.scss';
+import withClass from "../hoc/withClass";
 
 class Car extends Component {
+
+    constructor(props) {
+        super(props);
+        this.inputRef = React.createRef()
+    }
+
+    componentDidMount() {
+        !this.props.index&&this.inputRef.current.focus()
+    }
+
     render() {
         // if(Math.random()>0.7){
         //     throw new Error('Car random failed')
         // }
         const {name, year, onChangeName, onDelete} = this.props;
-        const style = {
-            ':hover': {
-                border: '2px solid #ccc',
-                boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .3)',
-                cursor: 'pointer'
-            }
-        }
-        const inputClasses = ['input']
-        name ? inputClasses.push('green') : inputClasses.push('red')
-        name.length > 4 && inputClasses.push('bold')
+
+        const inputClasses = [styles.input]
+        name ? inputClasses.push(styles.green) : inputClasses.push(styles.red)
+        name.length > 4 && inputClasses.push(styles.bold)
         return (
-            <div className="car" style={style}>
+            <>
                 <h3>Car name: {name}</h3>
                 <p>Year: <strong>{year}</strong></p>
-                <input className={inputClasses.join(' ')}
+                <input
+                    ref={this.inputRef}
+                    className={inputClasses.join(' ')}
                        type="text"
                        onChange={onChangeName}
                        value={name}/>
                 <button onClick={onDelete}>Delete</button>
-            </div>
-        );
+            </>
+        )
     }
 }
 
+Car.propTypes = {
+    name: PropTypes.string,
+    year: PropTypes.number,
+    index: PropTypes.number,
+    onChangeName: PropTypes.func,
+    onDelete: PropTypes.func,
+}
 
-export default Radium(Car);
+export default withClass(Car, styles.Car)

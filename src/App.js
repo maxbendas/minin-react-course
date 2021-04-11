@@ -4,6 +4,8 @@ import Car from "./car/Car";
 import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 import Counter from "./car/Counter/Counter";
 
+export const ClickedContext = React.createContext(false)
+
 class App extends Component {
     constructor(props) {
         super(props)
@@ -14,7 +16,8 @@ class App extends Component {
                 {name: 'Mazda', year: 2020},
             ],
             pageTitle: 'React',
-            showCars: false
+            showCars: false,
+            clicked: false
         }
     }
 
@@ -40,12 +43,15 @@ class App extends Component {
         return (
             <div className="app">
                 <h1>{this.props.title}</h1>
-                <Counter/>
+                <ClickedContext.Provider value={this.state.clicked}>
+                    <Counter/>
+                </ClickedContext.Provider>
                 <button
                     className="button"
                     onClick={this.toggleCarsHandler}>
                     Toggle cars
                 </button>
+                <button onClick={() => (this.setState({clicked: !this.state.clicked}))}>Clicked</button>
                 <div style={{
                     width: 400,
                     margin: 'auto',
@@ -55,10 +61,11 @@ class App extends Component {
                         return (
                             <ErrorBoundary key={index}>
                                 <Car
-                                     name={car.name}
-                                     year={car.year}
-                                     onChangeName={(e) => this.onChangeName(e.target.value, index)}
-                                     onDelete={() => this.deleteHandler(index)}
+                                    index={index}
+                                    name={car.name}
+                                    year={car.year}
+                                    onChangeName={(e) => this.onChangeName(e.target.value, index)}
+                                    onDelete={() => this.deleteHandler(index)}
                                 />
                             </ErrorBoundary>
                         )
