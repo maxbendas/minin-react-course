@@ -1,79 +1,42 @@
-import './App.scss';
-import React, {Component} from "react";
-import Car from "./car/Car";
-import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
-import Counter from "./car/Counter/Counter";
+import React, {useState} from 'react'
+import './App.scss'
+import {NavLink, Redirect, Route, Switch} from 'react-router-dom'
+import About from './About/About'
+import Cars from './Cars/Cars'
+import CarDetail from "./Cars/CarDetail/CarDetail";
 
-export const ClickedContext = React.createContext(false)
-
-class App extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            cars: [
-                {name: 'Audi', year: 2000},
-                {name: 'Ford', year: 2010},
-                {name: 'Mazda', year: 2020},
-            ],
-            pageTitle: 'React',
-            showCars: false,
-            clicked: false
-        }
-    }
-
-    onChangeName = (name, index) => {
-        const car = this.state.cars[index]
-        car.name = name
-        const cars = [...this.state.cars]
-        cars[index] = car
-        this.setState({cars})
-    }
-
-    toggleCarsHandler = () => {
-        this.setState({showCars: !this.state.showCars})
-    }
-
-    deleteHandler = (index) => {
-        const cars = [...this.state.cars]
-        cars.splice(index, 1)
-        this.setState({cars})
-    }
-
-    render() {
-        return (
-            <div className="app">
-                <h1>{this.props.title}</h1>
-                <ClickedContext.Provider value={this.state.clicked}>
-                    <Counter/>
-                </ClickedContext.Provider>
-                <button
-                    className="button"
-                    onClick={this.toggleCarsHandler}>
-                    Toggle cars
-                </button>
-                <button onClick={() => (this.setState({clicked: !this.state.clicked}))}>Clicked</button>
-                <div style={{
-                    width: 400,
-                    margin: 'auto',
-                    paddingTop: 20
-                }}>
-                    {this.state.showCars && this.state.cars.map((car, index) => {
-                        return (
-                            <ErrorBoundary key={index}>
-                                <Car
-                                    index={index}
-                                    name={car.name}
-                                    year={car.year}
-                                    onChangeName={(e) => this.onChangeName(e.target.value, index)}
-                                    onDelete={() => this.deleteHandler(index)}
-                                />
-                            </ErrorBoundary>
-                        )
-                    })}
-                </div>
+const App = () => {
+    const [login, setLogin] = useState(false)
+    return (
+        <div>
+            <nav className="nav">
+                <ul>
+                    <li>
+                        <NavLink to="/" exact>Home</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/about">About</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/cars">Cars</NavLink>
+                    </li>
+                </ul>
+            </nav>
+            <hr/>
+            <div style={{textAlign: 'center'}}>
+                <h1>Is logged in {login ? 'TRUE' : 'FALSE'}</h1>
+                <button onClick={() => setLogin(true)}>Login</button>
             </div>
-        );
-    }
+            <hr/>
+            <Switch>
+                <Route path="/" exact render={() => <h1>Home Page</h1>}/>
+                {login && <Route path="/about" component={About}/>}
+                <Route path="/cars/:name" component={CarDetail}/>
+                <Route path="/cars" component={Cars}/>
+                <Redirect to="/"/>
+            </Switch>
+        </div>
+    );
 }
 
-export default App;
+export default App
